@@ -6,24 +6,26 @@ public class SandLab {
         SandLab lab = new SandLab(145, 95);
         lab.run();
     }
-  
+    
     // Number represents ID and density; lower = less dense
-    public static final int EXPLOSION = 22; // Causes chain destruction reactions
-    public static final int FUNGUS = 21; // Grows upwards
-    public static final int DIAMOND = 20; // Causes chain destruction reactions
-    public static final int FIRE_TAP = 19; // Grows upwards
-    public static final int WATER_TAP = 18; // Grows upwards
-    public static final int METAL = 17; // Strongest sturdy element
-    public static final int SLIME = 16; // Grows downards and in all direction in acid
-    public static final int TNT = 15; // Explodes when touched by fire or lava
-    public static final int ACID = 14; // Dissolves almost everything
-    public static final int ROCK = 13; // Sturdy element but it may be dissolved or weathered down
-    public static final int LAVA = 12; // Dissolves material but cools into rock or fire
-    public static final int DIRT = 11; 
-    public static final int MAGIC_SAND = 10; // Falls sideways
-    public static final int SAND = 9;
-    public static final int ALGAE = 8; // Grows in water
-    public static final int SPORE = 7; // Germinates in presence of water and dirt
+    public static final int EXPLOSION = 24; // Causes chain destruction reactions
+    public static final int FUNGUS = 23; // Grows upwards
+    public static final int DIAMOND = 22; // Causes chain destruction reactions
+    public static final int FIRE_TAP = 21; // Grows upwards
+    public static final int WATER_TAP = 20; // Grows upwards
+    public static final int METAL = 19; // Strongest sturdy element
+    public static final int SLIME = 18; // Grows downards and in all direction in acid
+    public static final int TNT = 17; // Explodes when touched by fire or lava
+    public static final int ACID = 16; // Dissolves almost everything
+    public static final int ROCK = 15; // Sturdy element but it may be dissolved or weathered down
+    public static final int GLASS = 14;
+    public static final int LAVA = 13; // Dissolves material but cools into rock or fire
+    public static final int DIRT = 12; 
+    public static final int MAGIC_SAND = 11; // Falls sideways
+    public static final int SAND = 10;
+    public static final int ALGAE = 9; // Grows in water
+    public static final int SPORE = 8; // Germinates in presence of water and dirt
+    public static final int POLLIWOG = 7;
     public static final int FAIRY = 6; // Purifies acid, TNT, slime, fire, lava but dies to metal
     public static final int WATER = 5; // Basic fluid
     public static final int SNOW = 4;
@@ -46,6 +48,7 @@ public class SandLab {
     public static final double ROCK_MELT_CHANCE = 0.0025;
     public static final double SPORE_GROW_CHANCE = 0.0025;
     public static final double FUNGUS_GROW_CHANCE = 0.0025;
+    public static final double POLLIWOG_GROW_CHANCE = 0.25;
     public static final double SNOW_FALL_CHANCE = 0.25;
     public static final double SNOW_MELT_CHANCE = 0.0001;
     public static final double TAP_SPAWN_CHANCE = 0.015;
@@ -56,7 +59,7 @@ public class SandLab {
   
     public SandLab(int numRows, int numCols) {
         String[] names;
-        names = new String[21];
+        names = new String[23];
         names[EMPTY] = "Empty";
         names[METAL] = "Metal";
         names[SAND] = "Sand";
@@ -78,6 +81,8 @@ public class SandLab {
         names[WATER_TAP] = "Water Tap";
         names[FIRE_TAP] = "Fire Tap";
         names[DIAMOND] = "Diamond";
+        names[GLASS] = "Glass";
+        names[POLLIWOG] = "Polliwog";
         display = new SandDisplay("Cypress Ranch Lab: Falling Sand", numRows, numCols, names);
         grid = new int[numRows][numCols];
     }
@@ -101,7 +106,7 @@ public class SandLab {
                     case WATER:     display.setColor(i, j, new Color(50, 50, 250)); break;
                     case GAS:       display.setColor(i, j, new Color(225, 225, 245)); break;
                     case ALGAE:     display.setColor(i, j, new Color(44, 145, 41)); break;
-                    case ACID:      display.setColor(i, j, new Color(210, 49, 222)); break;
+                    case ACID:      display.setColor(i, j, new Color(135, 49, 222)); break;
                     case LAVA:      display.setColor(i, j, new Color(255, 75, 45)); break;
                     case ROCK:      display.setColor(i, j, new Color(110, 95, 95)); break;
                     case TNT:       display.setColor(i, j, new Color(255, 15, 15)); break;
@@ -109,12 +114,18 @@ public class SandLab {
                     case BLUE_FIRE: display.setColor(i, j, new Color(5, 165, 255)); break;
                     case EXPLOSION: display.setColor(i, j, new Color(255, 175, 0)); break;
                     case DIRT:      display.setColor(i, j, new Color(155, 75, 45)); break;
-                    case SLIME:     display.setColor(i, j, new Color(155, 25, 200)); break;
+                    case SLIME:     display.setColor(i, j, new Color(37, 26, 161)); break;
                     case SPORE:     display.setColor(i, j, new Color(125, 125, 55)); break;
                     case FUNGUS:    display.setColor(i, j, new Color(155, 155, 75)); break;
                     case FAIRY:     display.setColor(i, j, new Color(195 + (int)(Math.random()*100)-50, 145, 195 + (int)(Math.random()*100)-50) ); break;
                     case SNOW:      display.setColor(i, j, new Color(245, 245, 255)); break;
                     case DIAMOND:   display.setColor(i, j, new Color(215, 215, 255)); break;
+                    case POLLIWOG:  display.setColor(i, j, new Color(207, 48, 255)); break;
+                    case GLASS: {
+                        if (isTouching(i, j, EMPTY)) display.setColor(i, j, new Color(225, 225, 255));
+                        else display.setColor(i, j, new Color(215, 215, 255)); 
+                        break;
+                    }
                     default:        display.setColor(i, j, new Color(255, 255, 255)); break;
                 }
             }
@@ -128,7 +139,24 @@ public class SandLab {
         int randCol = (int)(Math.random() * (grid[randRow].length));
         switch (grid[randRow][randCol]){
             case SAND: {
+                if (isOnFire(randRow, randCol)){
+                    grid[randRow][randCol] = GLASS; break;
+                }
                 moveAndSwap(randRow, randCol, randRow+1, randCol);
+                break;
+            }
+            case POLLIWOG: {
+                if (Math.random() >= POLLIWOG_GROW_CHANCE) break;
+                if (isTouching(randRow, randCol, WATER) && isTouching(randRow, randCol, POLLIWOG)){
+                    grid[randRow][randCol] = WATER; break;
+                }
+                if (isOnFire(randRow, randCol)){
+                    grid[randRow][randCol] = GAS; break;
+                }
+                grow(randRow, randCol, randRow, randCol+1, WATER, POLLIWOG);
+                grow(randRow, randCol, randRow, randCol-1, WATER, POLLIWOG);
+                grow(randRow, randCol, randRow+1, randCol, WATER, POLLIWOG);
+                grow(randRow, randCol, randRow-1, randCol, WATER, POLLIWOG);
                 break;
             }
             case MAGIC_SAND: {
@@ -140,7 +168,7 @@ public class SandLab {
                 break;
             }
             case SPORE: {
-                if (isTouching(randRow, randCol, FIRE) || isTouching(randRow, randCol, LAVA) || isTouching(randRow, randCol, BLUE_FIRE)){
+                if (isOnFire(randRow, randCol)){
                     grid[randRow][randCol] = FIRE; break;
                 }
                 if (Math.random() < SPORE_GROW_CHANCE && isTouching(randRow, randCol, DIRT) && isTouching(randRow, randCol, WATER)){
@@ -150,7 +178,7 @@ public class SandLab {
                 break;
             }
             case FUNGUS: {
-                if (isTouching(randRow, randCol, FIRE) || isTouching(randRow, randCol, LAVA) || isTouching(randRow, randCol, BLUE_FIRE)){
+                if (isOnFire(randRow, randCol)){
                     grid[randRow][randCol] = FIRE; break;
                 }
                 if (Math.random() < FUNGUS_GROW_CHANCE){
@@ -207,7 +235,7 @@ public class SandLab {
             }
             case ALGAE: {
                 int randDir = ((int)(Math.random() * 4));
-                if (isTouching(randRow, randCol, FIRE) || isTouching(randRow, randCol, LAVA) || isTouching(randRow, randCol, BLUE_FIRE)){
+                if (isOnFire(randRow, randCol)){
                     grid[randRow][randCol] = FIRE; break;
                 }
                 if (Math.random() >= ALGAE_GROW_CHANCE) break;
@@ -237,7 +265,7 @@ public class SandLab {
                 if (isTouching(randRow, randCol, FAIRY)){
                     grid[randRow][randCol] = ROCK; break;
                 }
-                if (Math.random() < LAVA_DECAY_CHANCE) {
+                else if (Math.random() < LAVA_DECAY_CHANCE) {
                     grid[randRow][randCol] = FIRE; break;
                 } else if (isTouching(randRow, randCol, WATER) || 
                           (Math.random() < LAVA_COOL_CHANCE && !isTouching(randRow, randCol, EMPTY))){
@@ -251,10 +279,9 @@ public class SandLab {
                 break;
             }
             case TNT: {
-                if (isTouching(randRow, randCol, FAIRY)){
-                    grid[randRow][randCol] = DIRT; break;
-                }
-                if (isTouching(randRow, randCol, FIRE) || isTouching(randRow, randCol, LAVA) || isTouching(randRow, randCol, BLUE_FIRE) )
+                if (isTouching(randRow, randCol, FAIRY))
+                    grid[randRow][randCol] = DIRT; 
+                else if (isOnFire(randRow, randCol))
                     grid[randRow][randCol] = EXPLOSION;
                 break;
             }
@@ -308,7 +335,7 @@ public class SandLab {
             }
             case SNOW: {
                 int randDir = (int)(Math.random() * 3) - 1;
-                if (Math.random() < SNOW_MELT_CHANCE || isTouching(randRow, randCol, FIRE) || isTouching(randRow, randCol, BLUE_FIRE) || isTouching(randRow, randCol, LAVA)){
+                if (Math.random() < SNOW_MELT_CHANCE || isOnFire(randRow, randCol)){
                     grid[randRow][randCol] = WATER; break;
                 }
                 if (Math.random() >= SNOW_FALL_CHANCE) break;
@@ -337,6 +364,13 @@ public class SandLab {
         }
     }
   
+    
+    private boolean isOnFire(int row, int col){
+        return  isTouching(row, col, FIRE) || 
+                isTouching(row, col, LAVA) || 
+                isTouching(row, col, BLUE_FIRE);
+    }
+    
     // Checks if any adjacent spaces (only cardinal directions) are the specified particle type
     private boolean isTouching(int row, int col, int particle){
         if (inBounds(row+1, col) && grid[row+1][col] == particle) return true;
@@ -348,7 +382,7 @@ public class SandLab {
     
     // Sets the new spot in the grid to replaceParticle if it is foodParticle
     private void grow(int row, int col, int newRow, int newCol, int foodParticle, int replaceParticle){
-        if (!(inBounds(newRow, newCol) && (foodParticle == ALL || grid[newRow][newCol] == foodParticle)))
+        if (!(inBounds(newRow, newCol) &&  (foodParticle == ALL || grid[newRow][newCol] == foodParticle)))
             return;
         if (grid[newRow][newCol] == DIAMOND) return;
         grid[newRow][newCol] = replaceParticle;
