@@ -88,9 +88,13 @@ public class SandLab {
     }
   
     // Called when the user clicks on a location using the given tool
-    private void locationClicked(int row, int col, int tool) {
-        if (tool == EMPTY || tool > grid[row][col])
-            grid[row][col] = tool;
+    private void locationClicked(int row, int col, int tool, int size) {
+        for (int i = row-(size/2); i < row+(size/2)+1; i++){
+           for (int j = col-(size/2); j < col+(size/2)+1; j++){ 
+               if (inBounds(i, j) && (tool == EMPTY || tool > grid[i][j]))
+                    grid[i][j] = tool;
+           }
+        }
     }
 
     // Copies each element of grid into the display
@@ -423,7 +427,7 @@ public class SandLab {
             display.pause(1);  //wait for redrawing and for mouse
             int[] mouseLoc = display.getMouseLocation();
             if (mouseLoc != null)  //test if mouse clicked
-                locationClicked(mouseLoc[0], mouseLoc[1], display.getTool());
+                locationClicked(mouseLoc[0], mouseLoc[1], display.getTool(), display.getPenSize());
         }
     }
 }
