@@ -7,9 +7,12 @@ public class SandLab {
         lab.run();
     }
   
-    // Number represents ID and density; lower = less dense    
-    public static final int FUNGUS = 19; // Grows upwards
-    public static final int EXPLOSION = 18; // Causes chain destruction reactions
+    // Number represents ID and density; lower = less dense
+    public static final int EXPLOSION = 22; // Causes chain destruction reactions
+    public static final int FUNGUS = 21; // Grows upwards
+    public static final int DIAMOND = 20; // Causes chain destruction reactions
+    public static final int FIRE_TAP = 19; // Grows upwards
+    public static final int WATER_TAP = 18; // Grows upwards
     public static final int METAL = 17; // Strongest sturdy element
     public static final int SLIME = 16; // Grows downards and in all direction in acid
     public static final int TNT = 15; // Explodes when touched by fire or lava
@@ -45,6 +48,7 @@ public class SandLab {
     public static final double FUNGUS_GROW_CHANCE = 0.0025;
     public static final double SNOW_FALL_CHANCE = 0.25;
     public static final double SNOW_MELT_CHANCE = 0.0001;
+    public static final double TAP_SPAWN_CHANCE = 0.015;
     
     // Game fields
     private int[][] grid;
@@ -52,7 +56,7 @@ public class SandLab {
   
     public SandLab(int numRows, int numCols) {
         String[] names;
-        names = new String[18];
+        names = new String[21];
         names[EMPTY] = "Empty";
         names[METAL] = "Metal";
         names[SAND] = "Sand";
@@ -71,6 +75,9 @@ public class SandLab {
         names[SPORE] = "Spore";
         names[FAIRY] = "Fairy";
         names[SNOW] = "Snow";
+        names[WATER_TAP] = "Water Tap";
+        names[FIRE_TAP] = "Fire Tap";
+        names[DIAMOND] = "Diamond";
         display = new SandDisplay("Cypress Ranch Lab: Falling Sand", numRows, numCols, names);
         grid = new int[numRows][numCols];
     }
@@ -107,6 +114,8 @@ public class SandLab {
                     case FUNGUS:    display.setColor(i, j, new Color(155, 155, 75)); break;
                     case FAIRY:     display.setColor(i, j, new Color(195 + (int)(Math.random()*100)-50, 145, 195 + (int)(Math.random()*100)-50) ); break;
                     case SNOW:      display.setColor(i, j, new Color(245, 245, 255)); break;
+                    case DIAMOND:   display.setColor(i, j, new Color(215, 215, 255)); break;
+                    default:        display.setColor(i, j, new Color(255, 255, 255)); break;
                 }
             }
         }
@@ -309,6 +318,22 @@ public class SandLab {
                     moveAndSwap(randRow, randCol, randRow+1, randCol);
                 break;
             }
+            case WATER_TAP: {
+                if (Math.random() >= TAP_SPAWN_CHANCE) break;
+                grow(randRow, randCol, randRow, randCol+1, EMPTY, WATER);
+                grow(randRow, randCol, randRow, randCol-1, EMPTY, WATER);
+                grow(randRow, randCol, randRow+1, randCol, EMPTY, WATER);
+                grow(randRow, randCol, randRow-1, randCol, EMPTY, WATER);
+                break;
+            }
+            case FIRE_TAP: {
+                if (Math.random() >= TAP_SPAWN_CHANCE) break;
+                grow(randRow, randCol, randRow, randCol+1, EMPTY, FIRE);
+                grow(randRow, randCol, randRow, randCol-1, EMPTY, FIRE);
+                grow(randRow, randCol, randRow+1, randCol, EMPTY, FIRE);
+                grow(randRow, randCol, randRow-1, randCol, EMPTY, FIRE);
+                break;
+            }
         }
     }
   
@@ -325,6 +350,7 @@ public class SandLab {
     private void grow(int row, int col, int newRow, int newCol, int foodParticle, int replaceParticle){
         if (!(inBounds(newRow, newCol) && (foodParticle == ALL || grid[newRow][newCol] == foodParticle)))
             return;
+        if (grid[newRow][newCol] == DIAMOND) return;
         grid[newRow][newCol] = replaceParticle;
     }
     
