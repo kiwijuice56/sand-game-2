@@ -1,5 +1,9 @@
-import java.awt.*;
-import java.util.*;
+/*************************/
+/* Eric Alfaro           */   
+/* 2021/10/28            */ 
+/*************************/
+
+import java.awt.Color;
 
 public class SandLab {
     public static void main(String[] args) {
@@ -7,34 +11,38 @@ public class SandLab {
         lab.run();
     }
     
+    /*************************/
+    /*    MATERIAL INIT.     */ 
+    /*************************/
+    
     // Number represents ID and density; lower = less dense
-    public static final int EXPLOSION = 25; // Causes chain destruction reactions
-    public static final int FUNGUS = 24; // Grows upwards
-    public static final int DIAMOND = 23; // Causes chain destruction reactions
-    public static final int FIRE_TAP = 22; 
-    public static final int WATER_TAP = 21; 
-    public static final int METAL = 20; // Strongest sturdy element
-    public static final int SLIME = 19; // Grows downards and in all direction in acid
-    public static final int TNT = 18; // Explodes when touched by fire or lava
-    public static final int ACID = 17; // Dissolves almost everything
-    public static final int ROCK = 16; // Sturdy element but it may be dissolved or weathered down
-    public static final int GLASS = 15;
-    public static final int LAVA = 14; // Dissolves material but cools into rock or fire
-    public static final int DIRT = 13; 
-    public static final int MAGIC_SAND = 12; // Falls sideways
-    public static final int SAND = 11;
-    public static final int ALGAE = 10; // Grows in water
-    public static final int SPORE = 9; // Germinates in presence of water and dirt
-    public static final int POLLIWOG = 8;
-    public static final int FAIRY = 7; // Purifies acid, TNT, slime, fire, lava but dies to metal
-    public static final int ICE = 6; 
-    public static final int WATER = 5; // Basic fluid
-    public static final int SNOW = 4;
-    public static final int BLUE_FIRE = 3; // Burns fungus, algae and spores
-    public static final int FIRE = 2; // Burns fungus, algae and spores
-    public static final int GAS = 1; // Goes upwards before dissapearing
-    public static final int EMPTY = 0; // Eraser
-    public static final int ALL = -1; // Code-use only; describes case where element is irrelevant 
+    public static final int EXPLOSION = 25;     // Causes chain destruction reactions
+    public static final int FUNGUS = 24;        // Grows upwards from germinated spores
+    public static final int DIAMOND = 23;       // Most stable material
+    public static final int FIRE_TAP = 22;      // Spawns fire
+    public static final int WATER_TAP = 21;     // Spawns water
+    public static final int METAL = 20;         // Second most stable material, can be exploded
+    public static final int SLIME = 19;         // Grows downwards, or in all directions containing acid
+    public static final int TNT = 18;           // Explodes when touched by fire or lava
+    public static final int ACID = 17;          // Dissolves almost everything
+    public static final int ROCK = 16;          // Stable material but it may be dissolved and weathered down
+    public static final int GLASS = 15;         // Created from sand, magic or normal
+    public static final int LAVA = 14;          // Dissolves material but cools into rock or fire
+    public static final int DIRT = 13;          // Supports spore germination
+    public static final int MAGIC_SAND = 12;    // Falls sideways
+    public static final int SAND = 11;          // Most basic falling element, can be smelted into glass
+    public static final int ALGAE = 10;         // Grows in water
+    public static final int SPORE = 9;          // Germinates in presence of water and dirt
+    public static final int POLLIWOG = 8;       // Spreads in water without completely overtaking it
+    public static final int FAIRY = 7;          // Purifies acid, TNT, slime, fire, and lava
+    public static final int ICE = 6;            // Creates crystals in water
+    public static final int WATER = 5;          // Basic fluid, supports many life materials but can evaporate
+    public static final int SNOW = 4;           // Falls slowly and melts to water
+    public static final int BLUE_FIRE = 3;      // Similar to fire but lasts longer
+    public static final int FIRE = 2;           // Burns fungus, algae and spores
+    public static final int GAS = 1;            // Goes upwards before dissapearing
+    public static final int EMPTY = 0;          // Eraser
+    public static final int ALL = -1;           // Code-use only; describes case where material type is irrelevant 
 
     // Control rate of random reactions in particles
     public static final double GAS_DECAY_CHANCE = 0.025;
@@ -56,10 +64,11 @@ public class SandLab {
     public static final double TAP_SPAWN_CHANCE = 0.015;
     public static final double WATER_FREEZE_CHANCE = 0.01;
     
-    // Game fields
+    // Other game fields
     private int[][] grid;
     private SandDisplay display;
   
+    // Constructs UI labels
     public SandLab(int numRows, int numCols) {
         String[] names;
         names = new String[24];
@@ -91,6 +100,10 @@ public class SandLab {
         grid = new int[numRows][numCols];
     }
   
+    /*************************/
+    /*     MAIN METHODS      */ 
+    /*************************/
+    
     // Called when the user clicks on a location using the given tool
     private void locationClicked(int row, int col, int tool, int size) {
         for (int i = row-(size/2); i < row+(size/2)+1; i++){
@@ -107,7 +120,6 @@ public class SandLab {
             for (int j = 0; j < grid[i].length; j++){
                 // Colors for each material
                 switch (grid[i][j]){
-                    case METAL:     display.setColor(i, j, new Color(195-(i/2), 150-(i/2), 150-(i/2))); break;
                     case SAND:      display.setColor(i, j, new Color(255, 191, 28)); break;
                     case MAGIC_SAND:display.setColor(i, j, new Color(255, 191, 28)); break;
                     case EMPTY:     display.setColor(i, j, new Color(0, 0, 0)); break;
@@ -116,7 +128,6 @@ public class SandLab {
                     case ALGAE:     display.setColor(i, j, new Color(44, 145, 41)); break;
                     case ACID:      display.setColor(i, j, new Color(135, 49, 222)); break;
                     case LAVA:      display.setColor(i, j, new Color(255, 95, 45)); break;
-                    case ROCK:      display.setColor(i, j, new Color(110, 95, 95)); break;
                     case TNT:       display.setColor(i, j, new Color(255, 15, 15)); break;
                     case FIRE:      display.setColor(i, j, new Color(255, 75, 0)); break;
                     case BLUE_FIRE: display.setColor(i, j, new Color(5, 165, 255)); break;
@@ -130,6 +141,20 @@ public class SandLab {
                     case ICE:       display.setColor(i, j, new Color(189, 246, 255)); break;
                     case DIAMOND:   display.setColor(i, j, new Color(245-i, 235-i, 245-i)); break;
                     case POLLIWOG:  display.setColor(i, j, new Color(40, 161, 161)); break;
+                    case ROCK: {
+                        if (i % 2 == 0 && j % 2 == 0)
+                            display.setColor(i, j, new Color(80, 65, 65));
+                        else
+                             display.setColor(i, j, new Color(90, 75, 75));
+                        break;
+                    }
+                    case METAL: {
+                        if (i % 3 == 0 || j % 3 == 0)
+                            display.setColor(i, j, new Color(145-(i/2), 130-(i/2), 130-(i/2)));
+                        else 
+                            display.setColor(i, j, new Color(165-(i/2), 150-(i/2), 150-(i/2))); 
+                        break;
+                    }
                     case GLASS: {
                         if (isTouching(i, j, EMPTY))
                             display.setColor(i, j, new Color(225-j, 225-j, 225-j)); 
@@ -143,262 +168,55 @@ public class SandLab {
         }
     }
 
-    // Called repeatedly.
-    // Causes one random particle to update its state
+    // Called repeatedly, causes one random particle to update its state
     public void step() {
-        int randRow = (int)(Math.random() * (grid.length));
-        int randCol = (int)(Math.random() * (grid[randRow].length));
-        switch (grid[randRow][randCol]){
-            case SAND: {
-                if (isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = GLASS; break;
-                }
-                moveAndSwap(randRow, randCol, randRow+1, randCol);
-                break;
-            }
-            case POLLIWOG: {
-                if (Math.random() >= POLLIWOG_GROW_CHANCE) break;
-                if (isTouching(randRow, randCol, WATER) && isTouching(randRow, randCol, POLLIWOG)){
-                    grid[randRow][randCol] = WATER; break;
-                }
-                if (isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = GAS; break;
-                }
-                grow(randRow, randCol+1, WATER, POLLIWOG);
-                grow(randRow, randCol-1, WATER, POLLIWOG);
-                grow(randRow+1, randCol, WATER, POLLIWOG);
-                grow(randRow-1, randCol, WATER, POLLIWOG);
-                break;
-            }
-            case MAGIC_SAND: {
-                if (isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = GLASS; break;
-                }
-                moveAndSwap(randRow, randCol, randRow, randCol + (randCol > grid[randRow].length/2 ? 1 : -1) );
-                break;
-            }
-            case DIRT: {
-                moveAndSwap(randRow, randCol, randRow+1, randCol);
-                break;
-            }
-            case SPORE: {
-                if (isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = FIRE; break;
-                }
-                if (Math.random() < SPORE_GROW_CHANCE && isTouching(randRow, randCol, DIRT) && isTouching(randRow, randCol, WATER)){
-                    grid[randRow][randCol] = FUNGUS; break;
-                }
-                moveAndSwap(randRow, randCol, randRow+1, randCol);
-                break;
-            }
-            case FUNGUS: {
-                if (isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = FIRE; break;
-                }
-                if (Math.random() < FUNGUS_GROW_CHANCE){
-                    grow(randRow-1, randCol, WATER, FUNGUS);
-                    grow(randRow-1, randCol, SPORE, FUNGUS);
-                    grow(randRow-1, randCol, EMPTY, FUNGUS);
-                }
-                break;
-            }
-            case FAIRY: {
-                if (Math.random() >= FAIRY_GROW_CHANCE) break;
-                int randDir = ((int)(Math.random() * 2));
-                if (isTouching(randRow, randCol, POLLIWOG) || isTouching(randRow, randCol, SPORE) || isTouching(randRow, randCol, FUNGUS) ){
-                    grid[randRow][randCol] = GAS; break;
-                }
-                if (isTouching(randRow, randCol, FAIRY)){
-                    grid[randRow][randCol] = EMPTY; break;
-                }
-                if (randDir == 0) {
-                    grow(randRow-1, randCol, EMPTY, FAIRY);
-                    grow(randRow+1, randCol, EMPTY, FAIRY);
-                }
-                else {
-                    grow(randRow, randCol-1, EMPTY, FAIRY);
-                    grow(randRow, randCol+1, EMPTY, FAIRY);
-                }
-                break;
-            }
-            case WATER: {
-                int randDir = (int)(Math.random() * 3) - 1;
-                if (isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = GAS; break;
-                }
-                if (randDir == -1 || randDir == 1)
-                    moveAndSwap(randRow, randCol, randRow, randCol+randDir);
-                else 
-                    moveAndSwap(randRow, randCol, randRow+1, randCol);
-                break;
-            }case ICE: {
-                if (isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = WATER; break;
-                }
-                if (Math.random() >= WATER_FREEZE_CHANCE) break; 
-                int randDir = (int)(Math.random() * 3) - 1;
-                grid[randRow][randCol] = EMPTY;
-                if ((randDir == -1 || randDir == 1) && !isTouching(randRow, randCol+randDir, ICE))
-                    grow(randRow, randCol+randDir, WATER, ICE);
-                else if (!isTouching(randRow+1, randCol, ICE))
-                    grow(randRow+1, randCol, WATER, ICE);
-                grid[randRow][randCol] = ICE;
-                break;
-            }
-            case ACID: {
-                if (isTouching(randRow, randCol, FAIRY)){
-                    grid[randRow][randCol] = WATER; break;
-                }
-                int randDir = (int)(Math.random() * 3) - 1;
-                if (randDir == -1 || randDir == 1)
-                    moveAndDestroy(randRow, randCol, randRow, randCol+randDir);
-                else 
-                    moveAndDestroy(randRow, randCol, randRow+1, randCol);
-                break;
-            }
-            case GAS: {
-                if (Math.random() < GAS_DECAY_CHANCE) {
-                    grid[randRow][randCol] = EMPTY; break;
-                }
-                int randDir = (int)(Math.random() * 3) - 1;
-                if (randDir == -1 || randDir == 1)
-                    moveAndSwap(randRow, randCol, randRow, randCol+randDir);
-                else 
-                    moveAndSwap(randRow, randCol, randRow-1, randCol);
-                break;
-            }
-            case ALGAE: {
-                int randDir = ((int)(Math.random() * 4));
-                if (isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = FIRE; break;
-                }
-                if (Math.random() >= ALGAE_GROW_CHANCE) break;
-                if (Math.abs(randDir) % 2 == 0)
-                    grow(randRow+randDir-1, randCol, WATER, ALGAE);
-                else
-                    grow(randRow, randCol+randDir-2, WATER, ALGAE);
-                break;
-            }
-            case SLIME: {
-                if (isTouching(randRow, randCol, FAIRY)){
-                    grid[randRow][randCol] = ALGAE; break;
-                }
-                if (isTouching(randRow, randCol, WATER) || isTouching(randRow, randCol, BLUE_FIRE)){
-                    grid[randRow][randCol] = GAS; break;
-                }
-                if (Math.random() >= SLIME_GROW_CHANCE) break;
-                grow(randRow+1, randCol, ALL, SLIME);
-                int randDir = ((int)(Math.random() * 4));
-                if (Math.abs(randDir) % 2 == 0)
-                    grow(randRow+randDir-1, randCol, ACID, SLIME);
-                else
-                    grow( randRow, randCol+randDir-2, ACID, SLIME);
-                break;
-            }
-            case LAVA: {
-                if (isTouching(randRow, randCol, FAIRY)){
-                    grid[randRow][randCol] = ROCK; break;
-                }
-                else if (Math.random() < LAVA_DECAY_CHANCE) {
-                    grid[randRow][randCol] = FIRE; break;
-                } else if (isTouching(randRow, randCol, WATER) || 
-                          (Math.random() < LAVA_COOL_CHANCE && !isTouching(randRow, randCol, EMPTY))){
-                    grid[randRow][randCol] = ROCK; break;
-                }
-                int randDir = (int)(Math.random() * 3) - 1;
-                if (randDir == -1 || randDir == 1)
-                    moveAndDestroy(randRow, randCol, randRow, randCol+randDir);
-                else 
-                    moveAndDestroy(randRow, randCol, randRow+1, randCol);
-                break;
-            }
-            case TNT: {
-                if (isTouching(randRow, randCol, FAIRY))
-                    grid[randRow][randCol] = DIRT; 
-                else if (isOnFire(randRow, randCol))
-                    grid[randRow][randCol] = EXPLOSION;
-                break;
-            }
-            case FIRE: {
-                if (isTouching(randRow, randCol, FAIRY)){
-                    grid[randRow][randCol] = GAS; break;
-                }
-                if (Math.random() < FIRE_DECAY_CHANCE) {
-                    grid[randRow][randCol] = GAS; break;
-                }
-                int randDir = (int)(Math.random() * 3) - 1;
-                if (randDir == -1 || randDir == 1)
-                    moveAndSwap(randRow, randCol, randRow, randCol+randDir);
-                else 
-                    moveAndSwap(randRow, randCol, randRow-1, randCol);
-                break;
-            }
-            case BLUE_FIRE: {
-                if (isTouching(randRow, randCol, FAIRY)){
-                    grid[randRow][randCol] = GAS; break;
-                }
-                if (Math.random() < BLUE_FIRE_DECAY_CHANCE) {
-                    grid[randRow][randCol] = GAS; break;
-                }
-                int randDir = (int)(Math.random() * 3) - 1;
-                if (randDir == -1 || randDir == 1)
-                    moveAndSwap(randRow, randCol, randRow, randCol+randDir);
-                else 
-                    moveAndSwap(randRow, randCol, randRow-1, randCol);
-                break;
-            }
-            case EXPLOSION: {
-                if (isTouching(randRow, randCol, FAIRY)){
-                    grid[randRow][randCol] = GAS; break;
-                }
-                if (Math.random() < EXPLOSION_DECAY_CHANCE || isTouching(randRow, randCol, GAS)) {
-                    grid[randRow][randCol] = GAS; break;
-                }
-                grow(randRow, randCol+1, ALL, EXPLOSION);
-                grow(randRow, randCol-1, ALL, EXPLOSION);
-                grow(randRow+1, randCol, ALL, EXPLOSION);
-                grow(randRow-1, randCol, ALL, EXPLOSION);
-                break;
-            }
-            case ROCK: {
-                if (isTouching(randRow, randCol, WATER) && Math.random() < ROCK_WEATHER_CHANCE)
-                    grid[randRow][randCol] = DIRT;
-                if (isTouching(randRow, randCol, BLUE_FIRE) && Math.random() < ROCK_MELT_CHANCE)
-                    grid[randRow][randCol] = LAVA;
-                break;
-            }
-            case SNOW: {
-                int randDir = (int)(Math.random() * 3) - 1;
-                if (Math.random() < SNOW_MELT_CHANCE || isOnFire(randRow, randCol)){
-                    grid[randRow][randCol] = WATER; break;
-                }
-                if (Math.random() >= SNOW_FALL_CHANCE) break;
-                if (randDir == -1 || randDir == 1)
-                    moveAndSwap(randRow, randCol, randRow, randCol+randDir);
-                else 
-                    moveAndSwap(randRow, randCol, randRow+1, randCol);
-                break;
-            }
-            case WATER_TAP: {
-                if (Math.random() >= TAP_SPAWN_CHANCE) break;
-                grow(randRow, randCol+1, EMPTY, WATER);
-                grow(randRow, randCol-1, EMPTY, WATER);
-                grow(randRow+1, randCol, EMPTY, WATER);
-                grow(randRow-1, randCol, EMPTY, WATER);
-                break;
-            }
-            case FIRE_TAP: {
-                if (Math.random() >= TAP_SPAWN_CHANCE) break;
-                grow(randRow, randCol+1, EMPTY, FIRE);
-                grow(randRow, randCol-1, EMPTY, FIRE);
-                grow(randRow+1, randCol, EMPTY, FIRE);
-                grow(randRow-1, randCol, EMPTY, FIRE);
-                break;
-            }
+        int row = (int)(Math.random() * (grid.length));
+        int col = (int)(Math.random() * (grid[row].length));
+        switch (grid[row][col]){
+            case SAND:          stepSand(row, col); break;
+            case POLLIWOG:      stepPolliwog(row, col); break;
+            case MAGIC_SAND:    stepMagicSand(row, col); break;
+            case DIRT:          moveAndSwap(row, col, row+1, col); break;
+            case SPORE:         stepSpore(row, col); break;
+            case FUNGUS:        stepFungus(row, col); break;
+            case FAIRY:         stepFairy(row, col); break;
+            case WATER:         stepWater(row, col); break;
+            case ICE:           stepIce(row, col); break;
+            case ACID:          stepAcid(row, col); break;
+            case GAS:           stepGas(row, col); break;
+            case ALGAE:         stepAlgae(row, col); break;
+            case SLIME:         stepSlime(row, col); break;
+            case LAVA:          stepLava(row, col); break;
+            case TNT:           stepTnt(row, col); break;
+            case FIRE:          stepFire(row, col, FIRE); break;
+            case BLUE_FIRE:     stepFire(row, col, BLUE_FIRE); break;  
+            case EXPLOSION:     stepExplosion(row, col); break;
+            case ROCK:          stepRock(row, col); break;
+            case SNOW:          stepSnow(row, col); break;
+            case WATER_TAP:     stepTap(row, col, WATER); break;
+            case FIRE_TAP:      stepTap(row, col, FIRE); break;
         }
     }
-  
     
+    // Main game loop
+    public void run() {
+        while (true) {
+            for (int i = 0; i < display.getSpeed(); i++)
+                step();
+            updateDisplay();
+            display.repaint();
+            display.pause(1);  // Wait for redrawing and for mouse
+            int[] mouseLoc = display.getMouseLocation();
+            if (mouseLoc != null)  // Test if mouse clicked
+                locationClicked(mouseLoc[0], mouseLoc[1], display.getTool(), display.getPenSize());
+        }
+    }
+    
+    /*************************/
+    /*     HELPER METHODS    */ 
+    /*************************/
+    
+    // Returns if the cell is touching any flame particle
     private boolean isOnFire(int row, int col){
         return  isTouching(row, col, FIRE) || 
                 isTouching(row, col, LAVA) || 
@@ -439,6 +257,8 @@ public class SandLab {
         grid[newRow][newCol] = temp;
     }
     
+    
+    // Checks if within grid boundaries
     private boolean inBounds(int row, int col){
         if (row >= grid.length || row < 0) 
             return false; // out of bounds vertically
@@ -447,17 +267,224 @@ public class SandLab {
         return true;
     }
     
-    // Do not modify
-    public void run() {
-        while (true) {
-            for (int i = 0; i < display.getSpeed(); i++)
-                step();
-            updateDisplay();
-            display.repaint();
-            display.pause(1);  //wait for redrawing and for mouse
-            int[] mouseLoc = display.getMouseLocation();
-            if (mouseLoc != null)  //test if mouse clicked
-                locationClicked(mouseLoc[0], mouseLoc[1], display.getTool(), display.getPenSize());
+    /*************************/
+    /*   PARTICLE METHODS    */ 
+    /*************************/
+    
+    private void stepSand(int row, int col){
+        if (isOnFire(row, col))
+            grid[row][col] = GLASS;
+        else
+            moveAndSwap(row, col, row+1, col);
+    }
+    
+    private void stepMagicSand(int row, int col){
+        if (isOnFire(row, col))
+            grid[row][col] = GLASS;
+        else
+            moveAndSwap(row, col, row, col+1);
+    }
+    
+    private void stepPolliwog(int row, int col){
+        if (isTouching(row, col, WATER) && isTouching(row, col, POLLIWOG))
+            grid[row][col] = WATER; 
+        else if (isOnFire(row, col))
+            grid[row][col] = GAS; 
+        else if (Math.random() < POLLIWOG_GROW_CHANCE){ 
+            grow(row, col+1, WATER, POLLIWOG);
+            grow(row, col-1, WATER, POLLIWOG);
+            grow(row+1, col, WATER, POLLIWOG);
+            grow(row-1, col, WATER, POLLIWOG);
+        }
+    }
+    
+    private void stepSpore(int row, int col){
+        if (isOnFire(row, col))
+            grid[row][col] = FIRE;
+        else if (Math.random() < SPORE_GROW_CHANCE && isTouching(row, col, DIRT) && isTouching(row, col, WATER))
+            grid[row][col] = FUNGUS;
+        else
+            moveAndSwap(row, col, row+1, col);
+    }
+    
+    private void stepFungus(int row, int col){
+        if (isOnFire(row, col))
+            grid[row][col] = FIRE;
+        else if (Math.random() < FUNGUS_GROW_CHANCE){
+            grow(row-1, col, WATER, FUNGUS);
+            grow(row-1, col, SPORE, FUNGUS);
+            grow(row-1, col, EMPTY, FUNGUS);
+        }
+    }
+    
+    private void stepFairy(int row, int col){
+        if (Math.random() >= FAIRY_GROW_CHANCE)
+            return;
+        int randDir = ((int)(Math.random() * 2));
+        if (isTouching(row, col, POLLIWOG) || isTouching(row, col, SPORE) || isTouching(row, col, FUNGUS))
+            grid[row][col] = GAS;
+        if (isTouching(row, col, FAIRY))
+            grid[row][col] = EMPTY;
+        else if (randDir == 0) {
+            grow(row-1, col, EMPTY, FAIRY);
+            grow(row+1, col, EMPTY, FAIRY);
+        } else {
+            grow(row, col-1, EMPTY, FAIRY);
+            grow(row, col+1, EMPTY, FAIRY);
+        }
+    }
+    
+    private void stepWater(int row, int col){
+        int randDir = (int)(Math.random() * 3) - 1;
+        if (isOnFire(row, col))
+            grid[row][col] = GAS;
+        else if (randDir == -1 || randDir == 1)
+            moveAndSwap(row, col, row, col+randDir);
+        else 
+            moveAndSwap(row, col, row+1, col);
+    }
+    
+    private void stepIce(int row, int col){
+        if (isOnFire(row, col)) {
+            grid[row][col] = WATER;
+            return;
+        }
+        if (Math.random() >= WATER_FREEZE_CHANCE)
+            return;
+        // must be temporarily empty to check ice collision
+        grid[row][col] = EMPTY;
+        int randDir = (int)(Math.random() * 3) - 1;
+        if ((randDir == -1 || randDir == 1) && !isTouching(row, col+randDir, ICE))
+            grow(row, col+randDir, WATER, ICE);
+        else if (!isTouching(row+1, col, ICE))
+            grow(row+1, col, WATER, ICE);
+        grid[row][col] = ICE;
+    }
+    
+    private void stepAcid(int row, int col){
+        if (isTouching(row, col, FAIRY))
+            grid[row][col] = WATER;
+        else {
+            int randDir = (int)(Math.random() * 3) - 1;
+            if (randDir == -1 || randDir == 1)
+                moveAndDestroy(row, col, row, col+randDir);
+            else 
+                moveAndDestroy(row, col, row+1, col);
+        }
+    }
+    
+    private void stepGas(int row, int col){
+        if (Math.random() < GAS_DECAY_CHANCE) 
+            grid[row][col] = EMPTY;
+        else {
+            int randDir = (int)(Math.random() * 3) - 1;
+            if (randDir == -1 || randDir == 1)
+                moveAndSwap(row, col, row, col+randDir);
+            else 
+                moveAndSwap(row, col, row-1, col);
+        }
+    }
+    
+    private void stepAlgae(int row, int col){
+        int randDir = ((int)(Math.random() * 4));
+        if (isOnFire(row, col))
+            grid[row][col] = FIRE;
+        else if (Math.random() < ALGAE_GROW_CHANCE){
+            if (Math.abs(randDir) % 2 == 0)
+                grow(row+randDir-1, col, WATER, ALGAE);
+            else
+                grow(row, col+randDir-2, WATER, ALGAE);
+        }
+    }
+    
+    private void stepSlime(int row, int col){
+        if (isTouching(row, col, FAIRY))
+            grid[row][col] = ALGAE; 
+        else if (isTouching(row, col, WATER) || isTouching(row, col, BLUE_FIRE))
+            grid[row][col] = GAS; 
+        else if (Math.random() < SLIME_GROW_CHANCE)
+            grow(row+1, col, ALL, SLIME);
+            int randDir = ((int)(Math.random() * 4));
+            if (Math.abs(randDir) % 2 == 0)
+                grow(row+randDir-1, col, ACID, SLIME);
+            else
+                grow(row, col+randDir-2, ACID, SLIME);
+    }
+    
+    private void stepLava(int row, int col){
+        if (Math.random() < LAVA_DECAY_CHANCE) 
+            grid[row][col] = FIRE;
+        else if (isTouching(row, col, FAIRY) || isTouching(row, col, WATER) || 
+                (Math.random() < LAVA_COOL_CHANCE && !isTouching(row, col, EMPTY))){
+            grid[row][col] = ROCK;
+        } else {
+            int randDir = (int)(Math.random() * 3) - 1;
+            if (randDir == -1 || randDir == 1)
+                moveAndDestroy(row, col, row, col+randDir);
+            else 
+                moveAndDestroy(row, col, row+1, col);
+        }
+    }
+    
+    private void stepTnt(int row, int col){
+        if (isTouching(row, col, FAIRY))
+            grid[row][col] = DIRT; 
+        else if (isOnFire(row, col) || isTouching(row, col, EXPLOSION) )
+            grid[row][col] = EXPLOSION;
+    }
+    
+    private void stepFire(int row, int col, int fire_type){
+        if (isTouching(row, col, FAIRY))
+            grid[row][col] = GAS; 
+        else if (Math.random() < (fire_type == BLUE_FIRE ? BLUE_FIRE_DECAY_CHANCE : FIRE_DECAY_CHANCE))
+            grid[row][col] = GAS;
+        else {
+            int randDir = (int)(Math.random() * 3) - 1;
+            if (randDir == -1 || randDir == 1)
+                moveAndSwap(row, col, row, col+randDir);
+            else 
+                moveAndSwap(row, col, row-1, col);
+        }
+    }
+    
+    private void stepExplosion(int row, int col){
+        if (isTouching(row, col, FAIRY))
+            grid[row][col] = GAS; 
+        else if (Math.random() < EXPLOSION_DECAY_CHANCE || isTouching(row, col, GAS)) 
+            grid[row][col] = GAS; 
+        else {
+            grow(row, col+1, ALL, EXPLOSION);
+            grow(row, col-1, ALL, EXPLOSION);
+            grow(row+1, col, ALL, EXPLOSION);
+            grow(row-1, col, ALL, EXPLOSION);
+        }
+    }
+    
+    private void stepRock(int row, int col){
+        if (isTouching(row, col, WATER) && Math.random() < ROCK_WEATHER_CHANCE)
+            grid[row][col] = DIRT;
+        if (isTouching(row, col, BLUE_FIRE) && Math.random() < ROCK_MELT_CHANCE)
+            grid[row][col] = LAVA;
+    }
+    
+    private void stepSnow(int row, int col){
+        if (Math.random() < SNOW_MELT_CHANCE || isOnFire(row, col))
+            grid[row][col] = WATER;
+        else if (Math.random() < SNOW_FALL_CHANCE){
+            int randDir = (int)(Math.random() * 3) - 1;
+            if (randDir == -1 || randDir == 1)
+                moveAndSwap(row, col, row, col+randDir);
+            else 
+                moveAndSwap(row, col, row+1, col);
+        }
+    }
+    
+    private void stepTap(int row, int col, int particle){
+        if (Math.random() >= TAP_SPAWN_CHANCE){
+            grow(row, col+1, EMPTY, particle);
+            grow(row, col-1, EMPTY, particle);
+            grow(row+1, col, EMPTY, particle);
+            grow(row-1, col, EMPTY, particle);
         }
     }
 }
