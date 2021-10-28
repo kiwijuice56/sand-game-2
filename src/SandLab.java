@@ -11,8 +11,8 @@ public class SandLab {
     public static final int EXPLOSION = 25; // Causes chain destruction reactions
     public static final int FUNGUS = 24; // Grows upwards
     public static final int DIAMOND = 23; // Causes chain destruction reactions
-    public static final int FIRE_TAP = 22; // Grows upwards
-    public static final int WATER_TAP = 21; // Grows upwards
+    public static final int FIRE_TAP = 22; 
+    public static final int WATER_TAP = 21; 
     public static final int METAL = 20; // Strongest sturdy element
     public static final int SLIME = 19; // Grows downards and in all direction in acid
     public static final int TNT = 18; // Explodes when touched by fire or lava
