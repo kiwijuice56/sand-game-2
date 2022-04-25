@@ -1,20 +1,14 @@
-/*************************/
-/* Eric Alfaro           */   
-/* 2021/10/28            */ 
-/*************************/
-
+// Eric Alfaro
+// 2021/10/28
 import java.awt.Color;
-import java.util.Arrays;
 
 public class SandLab {
     public static void main(String[] args) {
-        SandLab lab = new SandLab(145, 95);
+        SandLab lab = new SandLab(150, 240);
         lab.run();
     }
     
-    /*************************/
-    /*    MATERIAL INIT.     */ 
-    /*************************/
+    // Material initialization
     
     // Number represents ID and density; lower = less dense
     public static final int EXPLOSION = 29;     // Causes chain destruction reactions
@@ -45,7 +39,7 @@ public class SandLab {
     public static final int BLUE_FIRE = 4;      // Similar to fire but lasts longer
     public static final int FIRE = 3;           // Burns fungus, algae and spores
     public static final int ACID_GAS = 2;
-    public static final int GAS = 1;            // Goes upwards before dissapearing
+    public static final int GAS = 1;            // Goes upwards before disappearing
     public static final int EMPTY = 0;          // Eraser
     public static final int ALL = -1;           // Code-use only; describes case where material type is irrelevant 
 
@@ -71,8 +65,8 @@ public class SandLab {
     public static final double WATER_FREEZE_CHANCE = 0.01;
     
     // Other game fields
-    private int[][] grid;
-    private SandDisplay display;
+    private final int[][] grid;
+    private final SandDisplay display;
   
     // Constructs UI labels
     public SandLab(int numRows, int numCols) {
@@ -111,9 +105,7 @@ public class SandLab {
         grid = new int[numRows][numCols];
     }
   
-    /*************************/
-    /*     MAIN METHODS      */ 
-    /*************************/
+    // Main methods
     
     // Called when the user clicks on a location using the given tool
     private void locationClicked(int row, int col, int tool, int size) {
@@ -130,52 +122,48 @@ public class SandLab {
         for (int i = 0; i < grid.length; i++){
             for (int j = 0; j < grid[i].length; j++){
                 // Colors for each material
-                switch (grid[i][j]){
-                    case SAND:      display.setColor(i, j, new Color(255, 191, 28)); break;
-                    case MAGIC_SAND:display.setColor(i, j, new Color(255, 191, 28)); break;
-                    case EMPTY:     display.setColor(i, j, new Color(0, 0, 0)); break;
-                    case WATER:     display.setColor(i, j, new Color(50, 50, 250)); break;
-                    case GAS:       display.setColor(i, j, new Color(225, 225, 245)); break;
-                    case ACID_GAS:  display.setColor(i, j, new Color(187, 158, 240)); break;
-                    case ALGAE:     display.setColor(i, j, new Color(44, 145, 41)); break;
-                    case ACID:      display.setColor(i, j, new Color(135, (int)(49*Math.random()), 222)); break;
-                    case LAVA:      display.setColor(i, j, new Color(255, 95, 45)); break;
-                    case TNT:       display.setColor(i, j, new Color(255, 15, 15)); break;
-                    case FIRE:      display.setColor(i, j, new Color(255, 75, 0)); break;
-                    case BLUE_FIRE: display.setColor(i, j, new Color(5, 165, 255)); break;
-                    case EXPLOSION: display.setColor(i, j, new Color(255, 175, 0)); break;
-                    case DIRT:      display.setColor(i, j, new Color(155, 75, 45)); break;
-                    case SLIME:     display.setColor(i, j, new Color(37, 26, 161)); break;
-                    case SPORE:     display.setColor(i, j, new Color(125, 125, 55)); break;
-                    case FUNGUS:    display.setColor(i, j, new Color(155, 155, 75)); break;
-                    case FAIRY:     display.setColor(i, j, new Color(195, 145, 195)); break;
-                    case SNOW:      display.setColor(i, j, new Color(245, 245, 255)); break;
-                    case ICE:       display.setColor(i, j, new Color(189, 246, 255)); break;
-                    case DIAMOND:   display.setColor(i, j, new Color(225-i, 235-i, 245-i)); break;
-                    case POLLIWOG:  display.setColor(i, j, new Color(40, 161, 161)); break;
-                    case SAND_DUCK:  display.setColor(i, j, new Color(255, 218, 97)); break;
-                    case ROCK: {
+                switch (grid[i][j]) {
+                    case SAND, MAGIC_SAND -> display.setColor(i, j, new Color(255, 191, 28));
+                    case EMPTY -> display.setColor(i, j, new Color(0, 0, 0));
+                    case WATER -> display.setColor(i, j, new Color(50, 50, 250));
+                    case GAS -> display.setColor(i, j, new Color(225, 225, 245));
+                    case ACID_GAS -> display.setColor(i, j, new Color(187, 158, 240));
+                    case ALGAE -> display.setColor(i, j, new Color(44, 145, 41));
+                    case ACID -> display.setColor(i, j, new Color(135, (int) (49 * Math.random()), 222));
+                    case LAVA -> display.setColor(i, j, new Color(255, 95, 45));
+                    case TNT -> display.setColor(i, j, new Color(255, 15, 15));
+                    case FIRE -> display.setColor(i, j, new Color(255, 75, 0));
+                    case BLUE_FIRE -> display.setColor(i, j, new Color(5, 165, 255));
+                    case EXPLOSION -> display.setColor(i, j, new Color(255, 175, 0));
+                    case DIRT -> display.setColor(i, j, new Color(155, 75, 45));
+                    case SLIME -> display.setColor(i, j, new Color(37, 26, 161));
+                    case SPORE -> display.setColor(i, j, new Color(125, 125, 55));
+                    case FUNGUS -> display.setColor(i, j, new Color(155, 155, 75));
+                    case FAIRY -> display.setColor(i, j, new Color(195, 145, 195));
+                    case SNOW -> display.setColor(i, j, new Color(245, 245, 255));
+                    case ICE -> display.setColor(i, j, new Color(189, 246, 255));
+                    case DIAMOND -> display.setColor(i, j, new Color(225 - i, 235 - i, 245 - i));
+                    case POLLIWOG -> display.setColor(i, j, new Color(40, 161, 161));
+                    case SAND_DUCK -> display.setColor(i, j, new Color(255, 218, 97));
+                    case ROCK -> {
                         if (i % 2 == 0 && j % 2 == 0)
                             display.setColor(i, j, new Color(80, 65, 65));
                         else
-                             display.setColor(i, j, new Color(90, 75, 75));
-                        break;
+                            display.setColor(i, j, new Color(90, 75, 75));
                     }
-                    case METAL: {
+                    case METAL -> {
                         if (i % 3 == 0 || j % 3 == 0)
-                            display.setColor(i, j, new Color(145-(i/2), 130-(i/2), 130-(i/2)));
-                        else 
-                            display.setColor(i, j, new Color(165-(i/2), 150-(i/2), 150-(i/2))); 
-                        break;
-                    }
-                    case GLASS: {
-                        if (isTouching(i, j, EMPTY) || (j%5 != 0 && i % (j%5) == 0))
-                            display.setColor(i, j, new Color(125+(i/2), 125+(i/2), 125+(i/2))); 
+                            display.setColor(i, j, new Color(145 - (i / 2), 130 - (i / 2), 130 - (i / 2)));
                         else
-                            display.setColor(i, j, new Color(35+i,35+i,35+i));
-                        break;
+                            display.setColor(i, j, new Color(165 - (i / 2), 150 - (i / 2), 150 - (i / 2)));
                     }
-                    default:        display.setColor(i, j, new Color(255, 255, 255)); break;
+                    case GLASS -> {
+                        if (isTouching(i, j, EMPTY) || (j % 5 != 0 && i % (j % 5) == 0))
+                            display.setColor(i, j, new Color(125 + (i / 2), 125 + (i / 2), 125 + (i / 2)));
+                        else
+                            display.setColor(i, j, new Color(35 + i, 35 + i, 35 + i));
+                    }
+                    default -> display.setColor(i, j, new Color(255, 255, 255));
                 }
             }
         }
@@ -185,33 +173,32 @@ public class SandLab {
     public void step() {
         int row = (int)(Math.random() * (grid.length));
         int col = (int)(Math.random() * (grid[row].length));
-        switch (grid[row][col]){
-            case SAND:          stepSand(row, col); break;
-            case POLLIWOG:      stepPolliwog(row, col); break;
-            case MAGIC_SAND:    stepMagicSand(row, col); break;
-            case DIRT:          moveAndSwap(row, col, row+1, col); break;
-            case SPORE:         stepSpore(row, col); break;
-            case FUNGUS:        stepFungus(row, col); break;
-            case FAIRY:         stepFairy(row, col); break;
-            case WATER:         stepWater(row, col); break;
-            case ICE:           stepIce(row, col); break;
-            case ACID:          stepAcid(row, col); break;
-            case GAS:           stepGas(row, col); break;
-            case ACID_GAS:      stepGas(row, col); break;
-            case ALGAE:         stepAlgae(row, col); break;
-            case SLIME:         stepSlime(row, col); break;
-            case LAVA:          stepLava(row, col); break;
-            case TNT:           stepTnt(row, col); break;
-            case FIRE:          stepFire(row, col, FIRE); break;
-            case BLUE_FIRE:     stepFire(row, col, BLUE_FIRE); break;  
-            case EXPLOSION:     stepExplosion(row, col); break;
-            case ROCK:          stepRock(row, col); break;
-            case SNOW:          stepSnow(row, col); break;
-            case WATER_TAP:     stepTap(row, col, WATER); break;
-            case FIRE_TAP:      stepTap(row, col, FIRE); break;
-            case LAVA_TAP:      stepTap(row, col, LAVA); break;
-            case ACID_TAP:      stepTap(row, col, ACID); break;
-            case SAND_DUCK:     stepSandDuck(row, col); break;
+        switch (grid[row][col]) {
+            case SAND -> stepSand(row, col);
+            case POLLIWOG -> stepPolliwog(row, col);
+            case MAGIC_SAND -> stepMagicSand(row, col);
+            case DIRT -> moveAndSwap(row, col, row + 1, col);
+            case SPORE -> stepSpore(row, col);
+            case FUNGUS -> stepFungus(row, col);
+            case FAIRY -> stepFairy(row, col);
+            case WATER -> stepWater(row, col);
+            case ICE -> stepIce(row, col);
+            case ACID -> stepAcid(row, col);
+            case GAS, ACID_GAS -> stepGas(row, col);
+            case ALGAE -> stepAlgae(row, col);
+            case SLIME -> stepSlime(row, col);
+            case LAVA -> stepLava(row, col);
+            case TNT -> stepTnt(row, col);
+            case FIRE -> stepFire(row, col, FIRE);
+            case BLUE_FIRE -> stepFire(row, col, BLUE_FIRE);
+            case EXPLOSION -> stepExplosion(row, col);
+            case ROCK -> stepRock(row, col);
+            case SNOW -> stepSnow(row, col);
+            case WATER_TAP -> stepTap(row, col, WATER);
+            case FIRE_TAP -> stepTap(row, col, FIRE);
+            case LAVA_TAP -> stepTap(row, col, LAVA);
+            case ACID_TAP -> stepTap(row, col, ACID);
+            case SAND_DUCK -> stepSandDuck(row, col);
         }
     }
     
@@ -229,9 +216,7 @@ public class SandLab {
         }
     }
     
-    /*************************/
-    /*     HELPER METHODS    */ 
-    /*************************/
+    // Helper methods
     
     // Returns if the cell is touching any flame particle
     private boolean isOnFire(int row, int col){
@@ -245,8 +230,7 @@ public class SandLab {
         if (inBounds(row+1, col) && grid[row+1][col] == particle) return true;
         if (inBounds(row-1, col) && grid[row-1][col] == particle) return true;
         if (inBounds(row, col+1) && grid[row][col+1] == particle) return true;
-        if (inBounds(row, col-1) && grid[row][col-1] == particle) return true;
-        return false;
+        return inBounds(row, col - 1) && grid[row][col - 1] == particle;
     }
     
     // Sets the new spot in the grid to replaceParticle if it is foodParticle
@@ -283,16 +267,10 @@ public class SandLab {
     
     // Checks if within grid boundaries
     private boolean inBounds(int row, int col){
-        if (row >= grid.length || row < 0) 
-            return false; // out of bounds vertically
-        if (col >= grid[row].length || col < 0)
-            return false; //out of bounds horizontally
-        return true;
+        return row < grid.length && row > 0 && col < grid[row].length && col >= 0;
     }
     
-    /*************************/
-    /*   PARTICLE METHODS    */ 
-    /*************************/
+    // Particle methods
     
     private void stepSand(int row, int col){
         if (isOnFire(row, col))
