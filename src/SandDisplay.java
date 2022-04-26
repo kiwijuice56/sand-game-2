@@ -1,7 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -19,7 +22,7 @@ public class SandDisplay extends JComponent implements MouseListener,
 		this.numCols = numCols;
 		tool = 1;
 		mouseLoc = null;
-		speed = computeSpeed(50);
+		speed = computeSpeed(100);
 		size = 3;
 
 		//determine cell size
@@ -53,6 +56,12 @@ public class SandDisplay extends JComponent implements MouseListener,
 			buttons[i].setPreferredSize(new Dimension(100, 21));
 			buttons[i].setActionCommand("" + i);
 			buttons[i].addActionListener(this);
+			buttons[i].setHorizontalAlignment(SwingConstants.LEFT);
+			try {
+				buttons[i].setIcon(new ImageIcon(ImageIO.read(new File(String.format("resources/icon_%d.png", i+1)))));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			buttonPanel.add(buttons[i]);
 		}
 		buttons[tool].setSelected(true);
@@ -65,7 +74,7 @@ public class SandDisplay extends JComponent implements MouseListener,
 		slow.setForeground(new Color(200, 203, 207));
 		fast.setForeground(new Color(200, 203, 207));
 
-		speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+		speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 200, 100);
 		speedSlider.addChangeListener(this);
 		speedSlider.setMajorTickSpacing(1);
 		speedSlider.setPaintTicks(true);
