@@ -23,7 +23,7 @@ public class SandDisplay extends JComponent implements MouseListener,
 		tool = 1;
 		mouseLoc = null;
 		speed = computeSpeed(100);
-		size = 3;
+		size = 32;
 
 		//determine cell size
 		cellSize = 3;

@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/sand_game_2_jar</output-path>
     <root id="archive" name="sand-game-2.jar">
       <element id="module-output" name="sand-game-2" />
+      <element id="dir-copy" path="$PROJECT_DIR$/resources" />
     </root>
   </artifact>
 </component>
