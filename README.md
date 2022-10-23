@@ -10,10 +10,10 @@ Expanded version of Cypress Ranch Computer Science II "Falling Sand" project.
 | ----------- | ----------- | ---|
 | ![icon](resources/empty.png)| Empty     | Erases other elements  |
 | ![icon](resources/gas.png)| Gas     | Inert substance that flows upwards and dissipates  |
-| ![icon](resources/acid gas.png)| Acid Gas     | Lingers for longer than gas and poisons life  |
+| ![icon](resources/acid&#32;gas.png)| Acid Gas     | Lingers for longer than gas and poisons life  |
 | ![icon](resources/hydrogen.png)| Hydrogen  | Extremely flammable gas|
 | ![icon](resources/fire.png)| Fire   | Spreads over flammable objects triggers explosions  |
-| ![icon](resources/blue fire.png)| Blue Fire   | Hotter and longer-lasting fire  |
+| ![icon](resources/blue&#32;fire.png)| Blue Fire   | Hotter and longer-lasting fire  |
 | ![icon](resources/acid.png)| Acid   | Melts through most materials |
 | ![icon](resources/alcohol.png)| Alcohol   | Flammable liquid that can poison life |
 | ![icon](resources/snow.png)| Snow   | Falls slowly and freezes water 
@@ -36,7 +36,7 @@ Expanded version of Cypress Ranch Computer Science II "Falling Sand" project.
 | ![icon](resources/tnt.png)| TNT   | Extremely explosive solid material |
 | ![icon](resources/slime.png)| Slime   | Grows inside of acid and dissolves into acid gas when harmed |
 | ![icon](resources/metal.png)| Metal   | Basic structural particles, can melt into mercury |
-| ![icon](resources/water tap.png)| X-tap   | Spawns material X around it |
+| ![icon](resources/water&#32;tap.png)| X-tap   | Spawns material X around it |
 | ![icon](resources/diamond.png)| Diamond   | Indestructible material |
 
 
