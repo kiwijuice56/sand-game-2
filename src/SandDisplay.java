@@ -44,7 +44,7 @@ public class SandDisplay extends JComponent implements MouseListener,
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setBackground(new Color(42, 42, 50));
-		buttonPanel.setLayout(new GridLayout(5, 6));
+		buttonPanel.setLayout(new GridLayout(6, 6));
 		topPanel.add(buttonPanel);
 
 		buttons = new JButton[buttonNames.length];
@@ -58,7 +58,7 @@ public class SandDisplay extends JComponent implements MouseListener,
 			buttons[i].addActionListener(this);
 			buttons[i].setHorizontalAlignment(SwingConstants.LEFT);
 			try {
-				buttons[i].setIcon(new ImageIcon(ImageIO.read(new File(String.format("resources/icon_%d.png", i+1)))));
+				buttons[i].setIcon(new ImageIcon(ImageIO.read(new File(String.format("resources/%s.png", buttonNames[i].toLowerCase())))));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -80,7 +80,7 @@ public class SandDisplay extends JComponent implements MouseListener,
 		speedSlider.setPaintTicks(true);
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
 		labelTable.put(0, slow);
-		labelTable.put(100, fast);
+		labelTable.put(200, fast);
 		speedSlider.setLabelTable(labelTable);
 		speedSlider.setPaintLabels(true);
 		speedSlider.setBackground(new Color(42, 42, 50));
