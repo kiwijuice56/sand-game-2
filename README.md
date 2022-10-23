@@ -26,8 +26,8 @@ Expanded version of Cypress Ranch Computer Science II "Falling Sand" project.
 | ![icon](resources/algae.png)| Algae   | Flammable blankets of life in water |
 | ![icon](resources/mercury.png)| Mercury   | Destroys all life |
 | ![icon](resources/sand.png)| Sand   | Basic falling particles, turns into glass when burned |
-| ![icon](resources/magic sand.png)| Magic Sand   | Falls sideways to the right |
-| ![icon](resources/sand duck.png)| Sand Duck  | Creates colonies in the sand, eats urchins and fungus |
+| ![icon](resources/magic&#32;sand.png)| Magic Sand   | Falls sideways to the right |
+| ![icon](resources/sand&#32;duck.png)| Sand Duck  | Creates colonies in the sand, eats urchins and fungus |
 | ![icon](resources/penguin.png)| Penguin   | Creates colonies in the ice/snow, eats urchins and polliwogs |
 | ![icon](resources/dirt.png)| Dirt   | Basic falling particles |
 | ![icon](resources/lava.png)| Lava   | Extremely hot liquid that cools into rock and starts fires |
